@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng Ngày Quốc tế Phụ nữ 8/3</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-pink: #ff85a2;
+            --soft-purple: #a29bfe;
+            --bg-white: #fff5f7;
+            --text-color: #444;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-white);
+            color: var(--text-color);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Hiệu ứng nền hoa rơi */
+        #canvas-flowers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Đẩy xuống dưới cùng */
+            pointer-events: none;
+        }
+
+        /* Container chính */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.2);
+            text-align: center;
+            z-index: 1;
+            flex: 1;
+        }
+
+        h1 {
+            color: var(--primary-pink);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .illustration {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .wish-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* Nút bấm */
+        .btn-wish {
+            background: linear-gradient(135deg, var(--primary-pink), var(--soft-purple));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.4);
+        }
+
+        .btn-wish:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 133, 162, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px;
+            text-align: center;
+            background-color: white;
+            color: var(--primary-pink);
+            font-weight: 500;
+            border-top: 1px solid #ffeef2;
+        }
+
+        /* Responsive cho điện thoại */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { margin: 20px; padding: 20px; }
+            .wish-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-flowers"></canvas>
+
+    <div class="container">
+        <h1>Chúc mừng Ngày Quốc tế Phụ nữ 8/3</h1>
+        
+        <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+             alt="Flowers for Women Day" class="illustration">
+
+        <div class="wish-text">
+            "Nhân ngày 8/3, xin gửi những lời chúc tốt đẹp nhất đến mẹ, các cô giáo và tất cả phụ nữ Việt Nam. 
+            Cảm ơn những 'đóa hồng' đã luôn hy sinh, cống hiến và làm cho cuộc đời này trở nên dịu dàng, rực rỡ hơn. 
+            Chúc mọi người một ngày tràn ngập niềm vui, tiếng cười và nhận được thật nhiều tình yêu thương!"
+        </div>
+
+        <button class="btn-wish" onclick="showMessage()">Gửi lời chúc ❤️</button>
+    </div>
+
+    <footer>
+        Chúc tất cả phụ nữ luôn xinh đẹp, hạnh phúc và thành công!
+    </footer>
+
+    <script>
+        /* --- JAVASCRIPT --- */
+
+        // 1. Hiển thị thông báo khi bấm nút
+        function showMessage() {
+            alert("🌸 Chúc bạn một ngày 8/3 thật ý nghĩa, hạnh phúc và luôn tỏa sáng như những bông hoa ngát hương! 🌸");
+        }
+
+        // 2. Hiệu ứng cánh hoa rơi (Sử dụng Canvas)
+        const canvas = document.getElementById('canvas-flowers');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const petals = [];
+        const petalCount = 30;
+
+        class Petal {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 10 + 5;
+                this.speed = Math.random() * 2 + 1;
+                this.angle = Math.random() * 360;
+                this.spin = Math.random() * 0.2 - 0.1;
+                this.color = `rgba(255, ${Math.floor(Math.random() * 50 + 150)}, ${Math.floor(Math.random() * 50 + 180)}, 0.7)`;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                
+                // Vẽ hình cánh hoa đơn giản
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.y += this.speed;
+                this.x += Math.sin(this.angle) * 0.5;
+                this.angle += this.spin;
+
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < petalCount; i++) {
+                petals.push(new Petal());
+            }
+        }
+
+        function animate() {
+            ctx.
